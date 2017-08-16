@@ -1,0 +1,50 @@
+<div class="country-content">
+    <h1 class="page-title">My Countries</h1>
+    <div class="country-create">
+      <form #todoForm="ngForm" (ngSubmit) = "createCountry(countryForm)" novalidate>
+    		<input type="text" id="name" class="form-control" placeholder="Type a country and press enter..." 
+    		       required
+    		       name="name" [(ngModel)]="newCountry.name"
+    		       #name="ngModel" >
+
+    		<div *ngIf="name.errors && name.dirty"
+    		     class="alert alert-danger">
+    		    <div [hidden]="!name.errors.required">
+    		      Name is required.
+    		    </div>
+    		</div>
+    	</form>
+    </div>
+    <ul class="country-list">
+      <li *ngFor="let country of countries" >
+        <div class="country-row" *ngIf="!editing || editingCountry.id != country.id">            
+            <span class="country-name">
+            	{{country.name}}
+            </span>
+            <span class="country-actions">
+                <a (click)="editCountry(country)">
+                	<i class="material-icons edit">edit</i>
+                </a>
+                <a (click)="deleteCountry(country.id)">
+                	<i class="material-icons delete">clear</i>
+                </a>
+            </span>
+        </div>
+        <div class="country-edit" *ngIf="editing && editingCountry.id === country.id">
+            <input class="form-control" type="text" 
+             [(ngModel)]="editingCountry.name" required>
+            <span class="edit-actions">
+                <a (click)="updateCountry(editingCountry)">
+                  <i class="material-icons">done</i>
+                </a>
+                <a (click)="clearEditing()">
+                  <i class="material-icons">clear</i>
+                </a>
+            </span>
+        </div>
+      </li>
+    </ul>
+    <div class="no-todos" *ngIf="countries && countries.length == 0">
+        <p>No Countries Found!</p>
+    </div>
+</div>
